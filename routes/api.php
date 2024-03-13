@@ -10,6 +10,8 @@ use App\Http\Controllers\api\PropertySaleController;
 use App\Http\Controllers\UserController;
 
 
+use App\Http\Controllers\api\ReviewController;
+
 
 
 /*
@@ -33,6 +35,12 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('property_rents', PropertyRentController::class);
     Route::apiResource('property_sales', PropertySaleController::class);
+<<<<<<< HEAD
      Route::apiResource('users', UserController::class);
 
 });
+=======
+    Route::apiResource("reviews", ReviewController::class);
+});
+
+>>>>>>> 1aedcb1569dac4036484ce20245cccbfbe3cecbe
