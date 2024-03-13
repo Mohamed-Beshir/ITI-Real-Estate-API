@@ -33,6 +33,6 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('property_rents', PropertyRentController::class);
     Route::apiResource('property_sales', PropertySaleController::class);
+    Route::apiResource("reviews", ReviewController::class);
 });
 
-Route::apiResource("reviews", ReviewController::class);
