@@ -9,7 +9,7 @@ use App\Models\Sale_payment;
 
 class Sale_offer extends Model
 {
-    protected $fillable = ['buyer_id', 'property_sale_id', 'offered_price', 'message'];
+    protected $fillable = ['buyer_id', 'property_sale_id', 'offered_price', 'message', 'status'];
     protected $table = 'sales_offers';
     use HasFactory;
 

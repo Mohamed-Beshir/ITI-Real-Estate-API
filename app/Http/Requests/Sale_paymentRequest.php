@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class Rent_offerUpdateRequest extends FormRequest
+class Sale_paymentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,8 +17,7 @@ class Rent_offerUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'offered_price' => 'required|numeric',
-            'message' => 'string',
+            'transaction_id' => 'required',
             'status' => 'string',
         ];
     }

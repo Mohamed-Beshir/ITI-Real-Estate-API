@@ -20,6 +20,7 @@ class Sale_offerUpdateRequest extends FormRequest
         return [
             'offered_price' => 'required|numeric',
             'message' => 'string',
+            'status' => 'string'
         ];
     }
 }

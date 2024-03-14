@@ -9,7 +9,7 @@ use App\Models\Rent_payment;
 
 class Rent_offer extends Model
 {
-    protected $fillable = ['buyer_id', 'property_rent_id', 'offered_price', 'message'];
+    protected $fillable = ['buyer_id', 'property_rent_id', 'offered_price', 'message', 'status'];
     protected $table = 'rents_offers';
     use HasFactory;
 
