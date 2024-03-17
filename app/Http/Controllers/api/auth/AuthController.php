@@ -29,7 +29,7 @@ class AuthController extends Controller
         $user = Auth::user();
         $token = $user->createToken('api-token')->plainTextToken;
 
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json(['user' => $user, 'access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     protected function createUser(array $data)
