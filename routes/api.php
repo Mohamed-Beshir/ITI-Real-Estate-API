@@ -9,7 +9,7 @@ use App\Http\Controllers\api\Sale_paymentController;
 
 use App\Http\Controllers\api\auth\AuthController;
 
-use App\Http\Controllers\api\PropertiesController;
+use App\Http\Controllers\api\PropertyController;
 use App\Http\Controllers\api\PropertyRentController;
 use App\Http\Controllers\api\PropertySaleController;
 use App\Http\Controllers\UserController;
@@ -38,11 +38,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::apiResource('property_rents', PropertyRentController::class);
+Route::apiResource('property_sales', PropertySaleController::class);
+
+Route::apiResource("properties",PropertyController::class);
+Route::get('properties-search', [PropertyController::class, 'search']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('property_rents', PropertyRentController::class);
-    Route::apiResource('property_sales', PropertySaleController::class);
-  
-    Route::apiResource("properties",PropertiesController::class);
   
     Route::apiResource('users', UserController::class);
     Route::apiResource("reviews", ReviewController::class);
