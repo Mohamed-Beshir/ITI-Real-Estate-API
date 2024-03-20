@@ -29,6 +29,27 @@ class PropertyController extends Controller
         return $properties;
     }
 
+    public function index_rent_or_sale(Request $request)
+    {
+        $orderBy = $request->input('order_by');
+        $status = $request->input('status');
+        $query = Property::query();
+        if($status == 'for_rent') {
+            $query->where('status', $status);
+        } else if ($status == 'for_sale') {
+            $query->where('status', $status);
+        }
+        if($orderBy == 'Highest_area') {
+            $properties = $query->orderBy('area', "desc")->get();
+        } else if ($orderBy == 'Lowest_area') {
+            $properties = $query->orderBy('area', "asc")->get();
+        }else {
+            $properties = $query->get();
+        }
+
+        return $properties;
+    }
+
     /**
      * Store a newly created resource in storage.
      */

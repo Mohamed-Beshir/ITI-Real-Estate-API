@@ -43,6 +43,7 @@ Route::apiResource('property_sales', PropertySaleController::class);
 
 Route::apiResource("properties",PropertyController::class);
 Route::get('properties-search', [PropertyController::class, 'search']);
+Route::get('properties-rent-or-sale', [PropertyController::class, 'index_rent_or_sale']);
 Route::middleware('auth:sanctum')->group(function () {
   
     Route::apiResource('users', UserController::class);
