@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Properties::class);
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return $this->asDateTime($value)->format('Y-m-d H:i A');
+    }
 }

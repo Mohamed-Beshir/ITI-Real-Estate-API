@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,28 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+        $email = $request->input('email');
+        $password = $request->input('password');
+
+        // Check if email contains '@realestate.com'
+        if (strpos($email, '@realestate.com') !== false) {
+            // Perform custom admin authentication
+            $admin = Admin::where('email', $email)->first();
+
+            if (!$admin || !Hash::check($password, $admin->password)) {
+                return response()->json(['message' => 'Invalid credentials'], 401);
+            }
+
+            // Generate admin token manually
+            $adminToken = 'manually_generated_admin_token';
+
+            // Save admin token in the database
+            $admin->update(['token' => $adminToken]);
+
+            return response()->json(['admin_token' => $adminToken]);
+        }
+
+        // Regular user authentication
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }

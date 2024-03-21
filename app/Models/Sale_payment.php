@@ -12,13 +12,8 @@ class Sale_payment extends Model
     protected $table = 'sales_payments';
     use HasFactory;
 
-    // public function property_sale()
-    // {
-    //     return $this->belongsTo(Property_sale::class);
-    // }
-
-    // public function sale_payment()
-    // {
-    //     return $this->belongsTo(Sale_payment::class);
-    // }
+    public function saleOffer()
+    {
+        return $this->belongsTo(Sale_offer::class, 'sales_offer_id');
+    }
 }

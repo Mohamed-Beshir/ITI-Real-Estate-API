@@ -13,13 +13,18 @@ class Sale_offer extends Model
     protected $table = 'sales_offers';
     use HasFactory;
 
-    public function property_sale()
+    public function propertySale()
     {
-        return $this->belongsTo(Property_sale::class);
+        return $this->belongsTo(PropertySale::class);
     }
 
-    public function sale_payment()
+    public function buyer()
     {
-        return $this->belongsTo(Sale_payment::class);
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function salePayment()
+    {
+        return $this->hasOne(Sale_payment::class);
     }
 }

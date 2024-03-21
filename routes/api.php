@@ -17,6 +17,8 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\api\ReviewController;
 
+use App\Http\Controllers\api\admin\AdminController;
+
 
 
 /*
@@ -56,4 +58,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 });
 
+Route::group(['middleware' => 'admin.auth'], function () {
+    Route::get('admin', [AdminController::class, 'index']);
+    Route::get('admin/rent-offers', [AdminController::class, 'rentOffers']);
+    Route::get('admin/sale-offers', [AdminController::class, 'saleOffers']);
+    Route::get('admin/payments', [AdminController::class, 'payments']);
+    Route::get('admin/users', [AdminController::class, 'users']);
+    Route::delete('admin/users/{id}', [AdminController::class, 'deleteUser']);
+
+});
 

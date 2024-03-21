@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Property_rent;
-use App\Models\Rent_payment;
+
 
 class Rent_offer extends Model
 {
@@ -13,13 +12,18 @@ class Rent_offer extends Model
     protected $table = 'rents_offers';
     use HasFactory;
 
-    public function property_rent()
+    public function propertyRent()
     {
-        return $this->belongsTo(Property_rent::class);
+        return $this->belongsTo(PropertyRent::class);
     }
 
-    public function rent_payment()
+    public function buyer()
     {
-        return $this->belongsTo(Rent_payment::class);
+        return $this->belongsTo(User::class, 'buyer_id');
+    }
+
+    public function rentPayment()
+    {
+        return $this->hasOne(Rent_payment::class);
     }
 }
