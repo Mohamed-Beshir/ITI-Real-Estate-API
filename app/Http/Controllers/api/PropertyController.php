@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\PropertyRequest;
 use Illuminate\Support\Facades\Auth;
+use App\Models\PropertyRent;
+use App\Models\PropertySale;
+use App\Models\Image;
 
 class PropertyController extends Controller
 {
@@ -24,6 +27,25 @@ class PropertyController extends Controller
             $properties = Property::orderBy('area', "asc")->get();
         }else {
             $properties = Property::all();
+        }
+
+        // Fetch price information for each property
+        foreach ($properties as $property) {
+            $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+            $propertySale = PropertySale::where('property_id', $property->id)->first();
+            $image = Image::where('property_id', $property->id)->first();
+            if($image){
+                $property->image = $image->url;
+            }
+
+            // Check if there's a rental record
+            if ($propertyRent) {
+                $property->price = $propertyRent->price;
+            }
+            // Check if there's a sales record
+            elseif ($propertySale) {
+                $property->price = $propertySale->price;
+            }  
         }
 
         return $properties;
@@ -45,6 +67,23 @@ class PropertyController extends Controller
             $properties = $query->orderBy('area', "asc")->get();
         }else {
             $properties = $query->get();
+        }
+
+        foreach ($properties as $property) {
+            $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+            $propertySale = PropertySale::where('property_id', $property->id)->first();
+            $image = Image::where('property_id', $property->id)->first();
+            if($image){
+                $property->image = $image->url;
+            }
+            // Check if there's a rental record
+            if ($propertyRent) {
+                $property->price = $propertyRent->price;
+            }
+            // Check if there's a sales record
+            elseif ($propertySale) {
+                $property->price = $propertySale->price;
+            }  
         }
 
         return $properties;
@@ -75,6 +114,24 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
+        $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+        $propertySale = PropertySale::where('property_id', $property->id)->first();
+        // Check if there's a rental record
+        if ($propertyRent) {
+            $property->price = $propertyRent->price;
+        }
+        // Check if there's a sales record
+        elseif ($propertySale) {
+            $property->price = $propertySale->price;
+        } 
+
+        // Eager load images along with the property
+        $property->load('images');
+        // Retrieve image URLs and store them in an array
+        $property->image = $property->images->pluck('url')->toArray();
+        // Remove the loaded relationship from the property object
+        $property->unsetRelation('images');
+
         return $property;
     }
 
@@ -217,6 +274,24 @@ class PropertyController extends Controller
 
     // Get the properties matching the criteria
     $properties = $query->get();
+    // Fetch price information for each property
+    foreach ($properties as $property) {
+        $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+        $propertySale = PropertySale::where('property_id', $property->id)->first();
+        $image = Image::where('property_id', $property->id)->first();
+        if($image){
+            $property->image = $image->url;
+        }
+
+        // Check if there's a rental record
+        if ($propertyRent) {
+            $property->price = $propertyRent->price;
+        }
+        // Check if there's a sales record
+        elseif ($propertySale) {
+            $property->price = $propertySale->price;
+        }  
+    }
 
     return response()->json($properties);
 }

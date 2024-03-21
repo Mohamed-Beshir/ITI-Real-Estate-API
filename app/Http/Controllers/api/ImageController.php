@@ -23,24 +23,28 @@ class ImageController extends Controller
      */
     public function store(Request $request)
     {
+        $property_id = $request->input('property_id');
         $request->validate([
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048' // Assuming maximum file size is 2MB (2048 KB)
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming maximum file size is 2MB (2048 KB)
         ]);
 
         $uploadedImages = [];
-
         foreach ($request->file('images') as $image) {
-            $url = time() . '_' . $image->getClientOriginalName();
+            $url = $image->getClientOriginalName();
             $image->move(public_path('images'), $url);
 
-            $uploadedImages[] = Image::create(['url' => $url]);
+            $image = new Image ();
+            $image->url = $url;
+            $image->property_id = $property_id;
+            $image->save();
+            // $uploadedImages[] = Image::create(['url' => $url, 'property_id' => $property_id]);
         }
 
-        if (count($uploadedImages) > 0) {
-            return response()->json(['success' => true, 'message' => 'Images uploaded successfully', 'images' => $uploadedImages]);
-        } else {
-            return response()->json(['success' => false, 'message' => 'No images uploaded', 'images' => []]);
-        }
+        // if (count($uploadedImages) > 0) {
+        //     return response()->json(['success' => true, 'message' => 'Images uploaded successfully', 'images' => $uploadedImages]);
+        // } else {
+        //     return response()->json(['success' => false, 'message' => 'No images uploaded', 'images' => []]);
+        // }
     }
 
     /**
