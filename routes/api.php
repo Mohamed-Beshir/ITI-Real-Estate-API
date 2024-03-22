@@ -2,20 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\api\Rent_offerController;
-use App\Http\Controllers\api\Sale_offerController;
-use App\Http\Controllers\api\Rent_paymentController;
-use App\Http\Controllers\api\Sale_paymentController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\api\ImageController;
+use App\Http\Controllers\api\ReviewController;
+use App\Http\Controllers\api\PropertyController;
 
 use App\Http\Controllers\api\auth\AuthController;
 
-use App\Http\Controllers\api\PropertyController;
+use App\Http\Controllers\api\Rent_offerController;
+use App\Http\Controllers\api\Sale_offerController;
 use App\Http\Controllers\api\PropertyRentController;
 use App\Http\Controllers\api\PropertySaleController;
-use App\Http\Controllers\UserController;
 
 
-use App\Http\Controllers\api\ReviewController;
+use App\Http\Controllers\api\Rent_paymentController;
+use App\Http\Controllers\api\Sale_paymentController;
 
 use App\Http\Controllers\api\admin\AdminController;
 
@@ -45,18 +46,21 @@ Route::apiResource('property_sales', PropertySaleController::class);
 
 Route::apiResource("properties",PropertyController::class);
 Route::get('properties-search', [PropertyController::class, 'search']);
+Route::get('properties-rent-or-sale', [PropertyController::class, 'index_rent_or_sale']);
 Route::middleware('auth:sanctum')->group(function () {
-  
+
     Route::apiResource('users', UserController::class);
     Route::apiResource("reviews", ReviewController::class);
-  
+
     Route::apiResource('/offers', Rent_offerController::class);
     Route::apiResource('/sale_offers', Sale_offerController::class);
 
     Route::apiResource('/payments', Rent_paymentController::class);
     Route::apiResource('/sale_payments', Sale_paymentController::class);
 
+
 });
+
 
 Route::group(['middleware' => 'admin.auth'], function () {
     Route::get('admin', [AdminController::class, 'index']);
@@ -67,4 +71,5 @@ Route::group(['middleware' => 'admin.auth'], function () {
     Route::delete('admin/users/{id}', [AdminController::class, 'deleteUser']);
 
 });
+Route::apiResource('images', ImageController::class);
 
