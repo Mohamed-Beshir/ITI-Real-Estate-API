@@ -53,20 +53,20 @@ Route::get('properties-rent-or-sale', [PropertyController::class, 'index_rent_or
 Route::get("reviews-comments", [ReviewController::class, 'index_comments']);
 Route::get("reviews-rates", [ReviewController::class, 'index_rates']);
 Route::apiResource("reviews", ReviewController::class);
+Route::apiResource('/rent_offers', Rent_offerController::class);
+Route::apiResource('/sale_offers', Sale_offerController::class);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
 
-    Route::apiResource('/rent_offers', Rent_offerController::class);
-    Route::apiResource('/sale_offers', Sale_offerController::class);
 
     Route::apiResource('/rent_payments', Rent_paymentController::class);
     
     Route::apiResource('/sale_payments', Sale_paymentController::class);
 
-    Route::get('users/{id}/offers',[UserOffersController::class,'getAllUserOffers']);
-
+    
 });
+Route::get('users/{id}/offers',[UserOffersController::class,'getAllUserOffers']);
 
 
 Route::group(['middleware' => 'admin.auth'], function () {
@@ -80,8 +80,8 @@ Route::group(['middleware' => 'admin.auth'], function () {
 });
 Route::apiResource('images', ImageController::class);
 
-Route::apiResource('/rent_offers', Rent_offerController::class);
-Route::apiResource('/sale_offers', Sale_offerController::class);
+// Route::apiResource('/rent_offers', Rent_offerController::class);
+// Route::apiResource('/sale_offers', Sale_offerController::class);
 //
 Route::put('saleoffers/accept/{id}', [SaleOfferController::class, 'acceptOffer']);
 Route::put('saleoffers/reject/{id}', [SaleOfferController::class, 'rejectOffer']);
