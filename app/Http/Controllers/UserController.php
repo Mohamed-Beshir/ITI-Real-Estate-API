@@ -51,9 +51,9 @@ class UserController extends Controller
             "name" => "required|min:3|:Users",
             // "email" => [Rule::unique('users')->ignore($user->id)],
             "email" => "required|email",
-             "role"=>"required",
+
              "password" => "required|min:8",
-            "confirmpassword" => "required|min:8"
+
 
         ]);
         if ($Validator->fails()) {

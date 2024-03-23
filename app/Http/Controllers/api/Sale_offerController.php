@@ -126,5 +126,5 @@ class Sale_offerController extends Controller
         return 'Delete';
     }
 
-   
+
 }
