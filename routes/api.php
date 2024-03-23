@@ -15,14 +15,15 @@ use App\Http\Controllers\api\Rent_offerController;
 
 
 use App\Http\Controllers\api\Sale_offerController;
+use App\Http\Controllers\api\UserOffersController;
+use App\Http\Controllers\api\admin\AdminController;
+use App\Http\Controllers\api\AgentOffersController;
 use App\Http\Controllers\api\PropertyRentController;
+
 use App\Http\Controllers\api\PropertySaleController;
+
 use App\Http\Controllers\api\Rent_paymentController;
 use App\Http\Controllers\api\Sale_paymentController;
-
-use App\Http\Controllers\api\admin\AdminController;
-
-use App\Http\Controllers\api\UserOffersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,7 +62,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
     Route::apiResource('/rent_payments', Rent_paymentController::class);
-    
+
     Route::apiResource('/sale_payments', Sale_paymentController::class);
 
     
@@ -90,3 +91,5 @@ Route::put('rentoffers/accept/{id}', [RentOfferController::class, 'acceptOffer']
 Route::put('rentoffers/reject/{id}', [RentOfferController::class, 'rejectOffer']);
 
 Route::apiResource('users',UserController::class);
+
+Route::get('agent/{id}/offers',[AgentOffersController::class,'getAllUserOffersByListerId']);
