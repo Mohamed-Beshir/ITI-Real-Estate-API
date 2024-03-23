@@ -21,7 +21,6 @@ class Rent_offerController extends Controller
     public function index()
     {
         // $offer = Rent_offer::all();
-        // $rentsOffers = Rent_offerResource::collection($offer);
         $rentsOffers = DB::table('rents_offers')
                     ->select(
                         'rents_offers.offered_price',
