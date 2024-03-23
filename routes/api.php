@@ -4,17 +4,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\api\ImageController;
+use App\Http\Controllers\RentOfferController;
+
+use App\Http\Controllers\SaleOfferController;
+
 use App\Http\Controllers\api\ReviewController;
 use App\Http\Controllers\api\PropertyController;
-
 use App\Http\Controllers\api\auth\AuthController;
-
 use App\Http\Controllers\api\Rent_offerController;
+
+
 use App\Http\Controllers\api\Sale_offerController;
 use App\Http\Controllers\api\PropertyRentController;
 use App\Http\Controllers\api\PropertySaleController;
-
-
 use App\Http\Controllers\api\Rent_paymentController;
 use App\Http\Controllers\api\Sale_paymentController;
 
@@ -54,8 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
 
     Route::apiResource('/offers', Rent_offerController::class);
-    Route::apiResource('/sale_offers', Sale_offerController::class);
-
+    
     Route::apiResource('/payments', Rent_paymentController::class);
     Route::apiResource('/sale_payments', Sale_paymentController::class);
 
@@ -64,3 +65,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::apiResource('images', ImageController::class);
 
+Route::apiResource('/rent_offers', Rent_offerController::class);
+Route::apiResource('/sale_offers', Sale_offerController::class);
+//
+Route::put('saleoffers/accept/{id}', [SaleOfferController::class, 'acceptOffer']);
+Route::put('saleoffers/reject/{id}', [SaleOfferController::class, 'rejectOffer']);
+//
+Route::put('rentoffers/accept/{id}', [RentOfferController::class, 'acceptOffer']);
+Route::put('rentoffers/reject/{id}', [RentOfferController::class, 'rejectOffer']);
+
+Route::apiResource('users',UserController::class);
