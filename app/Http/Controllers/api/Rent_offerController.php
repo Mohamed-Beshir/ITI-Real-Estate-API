@@ -10,6 +10,7 @@ use App\Http\Requests\Rent_offerRequest;
 use App\Http\Requests\Rent_offerUpdateRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Rent_offerResource;
+use Illuminate\Support\Facades\DB;
 
 
 class Rent_offerController extends Controller
@@ -19,8 +20,23 @@ class Rent_offerController extends Controller
      */
     public function index()
     {
-        $offer = Rent_offer::all();
-        return Rent_offerResource::collection($offer);
+        // $offer = Rent_offer::all();
+        // return Rent_offerResource::collection($offer);
+        $rentsOffers = DB::table('rents_offers')
+                    ->select(
+                        'rents_offers.offered_price',
+                        'rents_offers.message',
+                        'users.email as buyer_email',
+                        'properties.title',
+                        'rents_offers.status',
+                        'users.name as buyer_name',
+                        'rents_offers.id'
+                    )
+                    ->join('users', 'rents_offers.buyer_id', '=', 'users.id')
+                    ->join('properties', 'rents_offers.property_rent_id', '=', 'properties.id')
+                    ->get();
+
+    return response()->json(['rentsOffers' => $rentsOffers]);
     }
 
     /**
@@ -28,8 +44,8 @@ class Rent_offerController extends Controller
      */
     public function store(Rent_offerRequest $request)
     {
-        
-        
+
+
         $validatedRequest = $request->validated();
         Rent_offer::create($validatedRequest);
 
@@ -59,7 +75,7 @@ class Rent_offerController extends Controller
         //     'offered_price' => $request->offered_price,
         //     'message' => $request->message
         // ]);
-    
+
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
 

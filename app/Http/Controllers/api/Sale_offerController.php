@@ -10,6 +10,7 @@ use App\Http\Requests\Sale_offerRequest;
 use App\Http\Requests\Sale_offerUpdateRequest;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Sale_offerResource;
+use Illuminate\Support\Facades\DB;
 
 
 class Sale_offerController extends Controller
@@ -24,8 +25,21 @@ class Sale_offerController extends Controller
      */
     public function index()
     {
-        $offer = Sale_offer::all();
-        return Sale_offerResource::collection($offer);
+        $salesOffers = DB::table('sales_offers')
+                    ->select(
+                        'sales_offers.offered_price',
+                        'sales_offers.message',
+                        'users.email as buyer_email',
+                        'properties.title',
+                        'sales_offers.status',
+                        'users.name as buyer_name',
+                        'sales_offers.id'
+                    )
+                    ->join('users', 'sales_offers.buyer_id', '=', 'users.id')
+                    ->join('properties', 'sales_offers.property_sale_id', '=', 'properties.id')
+                    ->get();
+
+    return response()->json(['salesOffers' => $salesOffers]);
     }
 
     /**
@@ -33,7 +47,7 @@ class Sale_offerController extends Controller
      */
     public function store( /* Request */ Sale_offerRequest $request)
     {
-        
+
         $validatedRequest = $request->validated();
         Sale_offer::create($validatedRequest);
 
@@ -63,7 +77,7 @@ class Sale_offerController extends Controller
         //     'offered_price' => $request->offered_price,
         //     'message' => $request->message
         // ]);
-    
+
         return response()->json(['message' => 'Data saved successfully'], 200);
     }
 
@@ -111,4 +125,6 @@ class Sale_offerController extends Controller
         $sale_offer->delete();
         return 'Delete';
     }
+
+   
 }
