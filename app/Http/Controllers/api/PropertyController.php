@@ -41,10 +41,12 @@ class PropertyController extends Controller
             // Check if there's a rental record
             if ($propertyRent) {
                 $property->price = $propertyRent->price;
+                $property->lister_id = $propertyRent->lister_id;
             }
             // Check if there's a sales record
             elseif ($propertySale) {
                 $property->price = $propertySale->price;
+                $property->lister_id = $propertySale->lister_id;
             }  
         }
 
@@ -295,5 +297,43 @@ class PropertyController extends Controller
 
     return response()->json($properties);
 }
+
+public function properties_agent(Request $request){
+    $agent_id = $request->input('agent_id');
+
+    // Query properties where the agent_id matches the lister_id in property_sales
+    $propertiesForSale = Property::join('property_sales', 'properties.id', '=', 'property_sales.property_id')
+        ->where('property_sales.lister_id', $agent_id)
+        ->select('properties.*')
+        ->get();
+
+    // Query properties where the agent_id matches the lister_id in property_rents
+    $propertiesForRent = Property::join('property_rents', 'properties.id', '=', 'property_rents.property_id')
+        ->where('property_rents.lister_id', $agent_id)
+        ->select('properties.*')
+        ->get();
+
+    // Merge the results of both queries
+    $properties = $propertiesForSale->merge($propertiesForRent);
+
+    foreach ($properties as $property) {
+        $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+        $propertySale = PropertySale::where('property_id', $property->id)->first();
+        $image = Image::where('property_id', $property->id)->first();
+        if($image){
+            $property->image = $image->url;
+        }
+        // Check if there's a rental record
+        if ($propertyRent) {
+            $property->price = $propertyRent->price;
+        }
+        // Check if there's a sales record
+        elseif ($propertySale) {
+            $property->price = $propertySale->price;
+        }  
+    }
+    return $properties;
+}
+
 
 }

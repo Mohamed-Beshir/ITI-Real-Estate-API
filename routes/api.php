@@ -43,12 +43,15 @@ Route::apiResource('property_rents', PropertyRentController::class);
 Route::apiResource('property_sales', PropertySaleController::class);
 
 Route::apiResource("properties",PropertyController::class);
+Route::get("properties-agent",[PropertyController::class, 'properties_agent']);
 Route::get('properties-search', [PropertyController::class, 'search']);
 Route::get('properties-rent-or-sale', [PropertyController::class, 'index_rent_or_sale']);
+Route::get("reviews-comments", [ReviewController::class, 'index_comments']);
+Route::get("reviews-rates", [ReviewController::class, 'index_rates']);
+Route::apiResource("reviews", ReviewController::class);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
-    Route::apiResource("reviews", ReviewController::class);
 
     Route::apiResource('/offers', Rent_offerController::class);
     Route::apiResource('/sale_offers', Sale_offerController::class);
