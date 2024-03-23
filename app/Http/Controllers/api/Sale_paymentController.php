@@ -26,7 +26,7 @@ class Sale_paymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(/* Sale_paymentRequest */ Request  $request)
+    public function store( Sale_paymentRequest   $request)
     {
         
         

@@ -20,7 +20,7 @@ use App\Http\Controllers\api\Sale_paymentController;
 
 use App\Http\Controllers\api\admin\AdminController;
 
-
+use App\Http\Controllers\api\UserOffersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,12 +52,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource("reviews", ReviewController::class);
 
-    Route::apiResource('/offers', Rent_offerController::class);
+    Route::apiResource('/rent_offers', Rent_offerController::class);
     Route::apiResource('/sale_offers', Sale_offerController::class);
 
-    Route::apiResource('/payments', Rent_paymentController::class);
+    Route::apiResource('/rent_payments', Rent_paymentController::class);
     Route::apiResource('/sale_payments', Sale_paymentController::class);
 
+    Route::get('users/{id}/offers',[UserOffersController::class,'getAllUserOffers']);
 
 });
 

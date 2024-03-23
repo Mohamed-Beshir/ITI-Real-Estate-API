@@ -26,7 +26,7 @@ class Rent_offerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(/* Rent_offerRequest */ Request  $request)
+    public function store(Rent_offerRequest $request)
     {
         
         

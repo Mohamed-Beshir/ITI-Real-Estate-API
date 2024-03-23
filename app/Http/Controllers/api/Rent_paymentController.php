@@ -26,7 +26,7 @@ class Rent_paymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(/* Rent_paymentRequest */ Request  $request)
+    public function store( Rent_paymentRequest   $request)
     {
         
         

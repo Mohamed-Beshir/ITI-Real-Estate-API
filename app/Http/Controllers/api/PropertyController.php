@@ -119,10 +119,12 @@ class PropertyController extends Controller
         // Check if there's a rental record
         if ($propertyRent) {
             $property->price = $propertyRent->price;
+            $property->property_rent_id = $propertyRent->id;
         }
         // Check if there's a sales record
         elseif ($propertySale) {
             $property->price = $propertySale->price;
+            $property->property_sale_id = $propertySale->id;
         } 
 
         // Eager load images along with the property

@@ -18,7 +18,7 @@ class Rent_offerRequest extends FormRequest
     {
         return [
             'buyer_id' => 'required|numeric',
-            'property_rent_id' => 'required|numeric|unique:rents_offers',
+            'property_rent_id' => 'required|numeric',
             'offered_price' => 'required|numeric',
             'message' => 'string',
         ];
