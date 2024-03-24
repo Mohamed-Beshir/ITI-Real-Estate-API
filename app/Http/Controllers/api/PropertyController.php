@@ -132,6 +132,7 @@ class PropertyController extends Controller
         // Eager load images along with the property
         $property->load('images');
         // Retrieve image URLs and store them in an array
+        $property->image_id = $property->images->pluck('id')->toArray();
         $property->image = $property->images->pluck('url')->toArray();
         // Remove the loaded relationship from the property object
         $property->unsetRelation('images');
@@ -144,13 +145,13 @@ class PropertyController extends Controller
      */
     public function update(PropertyRequest $request, Property $property)
     {
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if ($property->user_id !== $user->id) {
-            return response()->json(['error' => 'You are not authorized to update this property.'], 403);
-        }
-
-        $property->update($request->validated());
+        // if ($property->user_id !== $user->id) {
+        //     return response()->json(['error' => 'You are not authorized to update this property.'], 403);
+        // }
+        $requestValidation = $request->validated();
+        $property->update($requestValidation);
         return $property;
     }
 
@@ -159,11 +160,10 @@ class PropertyController extends Controller
      */
     public function destroy(Property $property)
     {
-        $user = Auth::user();
-
-        if ($property->user_id !== $user->id) {
-            return response()->json(['error' => 'You are not authorized to delete this property.'], 403);
-        }
+        // $user = Auth::user();
+        // if ($property->user_id !== $user->id) {
+        //     return response()->json(['error' => 'You are not authorized to delete this property.'], 403);
+        // }
 
         $property->delete();
         return response()->json(['message' => 'Property deleted successfully']);

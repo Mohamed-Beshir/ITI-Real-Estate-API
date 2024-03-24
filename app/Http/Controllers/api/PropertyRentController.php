@@ -47,9 +47,9 @@ class PropertyRentController extends Controller
 
     public function destroy(PropertyRent $propertyRent)
     {
-        if (auth()->user()->id !== $propertyRent->lister_id) {
-            return response()->json(['message' => 'Unauthorized. You do not have permission to perform this action.'], 403);
-        }
+        // if (auth()->user()->id !== $propertyRent->lister_id) {
+        //     return response()->json(['message' => 'Unauthorized. You do not have permission to perform this action.'], 403);
+        // }
         
         $propertyRent->delete();
         return response()->json(['message' => 'Property rent deleted successfully']);
