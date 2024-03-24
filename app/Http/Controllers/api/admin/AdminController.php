@@ -133,7 +133,7 @@ class AdminController extends Controller
                     'status' => $saleOffer->status,
                     'offer_creation_date' => $saleOffer->created_at->format('Y-m-d H:i A'),
                     'lister_name' => $saleOffer->propertySale->lister->name,
-                    'price' => $saleOffer->propertySale->updated_price ?? $rentOffer->propertyRent->price,
+                    'price' => $saleOffer->propertySale->updated_price ?? $saleOffer->propertySale->price,
                     'list_creation_date' => $saleOffer->propertySale->created_at->format('Y-m-d H:i A'),
                     'property' => [
                         'id' => $saleOffer->propertySale->property->id,

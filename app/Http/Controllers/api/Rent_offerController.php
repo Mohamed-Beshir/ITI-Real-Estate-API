@@ -20,22 +20,14 @@ class Rent_offerController extends Controller
      */
     public function index()
     {
-        // $offer = Rent_offer::all();
-        $rentsOffers = DB::table('rents_offers')
-                    ->select(
-                        'rents_offers.offered_price',
-                        'rents_offers.message',
-                        'users.email as buyer_email',
-                        'properties.title',
-                        'rents_offers.status',
-                        'users.name as buyer_name',
-                        'rents_offers.id'
-                    )
-                    ->join('users', 'rents_offers.buyer_id', '=', 'users.id')
-                    ->join('properties', 'rents_offers.property_rent_id', '=', 'properties.id')
-                    ->get();
+        $rentOffers = Rent_offer::all();
+    
+    
+        $responseData = [
+            'data' => $rentOffers->toArray()
+        ];
 
-    return response()->json(['rentsOffers' => $rentsOffers]);
+        return response()->json($responseData);
     }
 
     /**

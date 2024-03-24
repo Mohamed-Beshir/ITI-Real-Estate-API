@@ -17,6 +17,7 @@ class Sale_paymentRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'sales_offer_id' => 'required|numeric|unique:sales_payments',
             'transaction_id' => 'required',
             'status' => 'string',
         ];
