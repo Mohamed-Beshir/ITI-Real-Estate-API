@@ -31,12 +31,7 @@ class SaleOfferController extends Controller
         return Response::json(['message' => 'Offer accepted successfully']);
     }
 
-    /**
-     * Reject the specified sales offer.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function rejectOffer($id)
     {
         $offer = Sale_offer::findOrFail($id);

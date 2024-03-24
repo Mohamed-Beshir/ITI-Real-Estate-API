@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Rent_offer;
 use Illuminate\Support\Facades\Response;
-use Mail;
 use App\Mail\SendMail;
+use Mail;
 
 
 class RentOfferController extends Controller
@@ -18,7 +18,7 @@ class RentOfferController extends Controller
         $offer->save();
         $buyer_name = $offer->buyer->name;
         $buyer_email = $offer->buyer->email;
-        $propertyTitle = $offer->propertySale->property->title;
+        $propertyTitle = $offer->propertyRent->property->title;
         $mailData = [
             'title' => 'Mail from BAZAR',
             'body_1' => 'Your offer for ',
@@ -31,12 +31,7 @@ class RentOfferController extends Controller
         return Response::json(['message' => 'Offer accepted successfully']);
     }
 
-    /**
-     * Reject the specified sales offer.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function rejectOffer($id)
     {
         $offer = Rent_offer::findOrFail($id);
@@ -44,7 +39,7 @@ class RentOfferController extends Controller
         $offer->save();
         $buyer_name = $offer->buyer->name;
         $buyer_email = $offer->buyer->email;
-        $propertyTitle = $offer->propertySale->property->title;
+        $propertyTitle = $offer->propertyRent->property->title;
         $mailData = [
             'title' => 'Mail from BAZAR',
             'body_1' => 'Your offer for ',

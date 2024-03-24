@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Property_sale;
-use App\Models\Sale_payment;
+
 
 class Sale_offer extends Model
 {
