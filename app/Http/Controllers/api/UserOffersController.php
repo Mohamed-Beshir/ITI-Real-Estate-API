@@ -50,11 +50,12 @@ class UserOffersController extends Controller
 
         });
 
-        $combinedOffers = $rentOffers->merge($saleOffers)->sortByDesc('offer_date')->values()->all();
-
+        $combinedOffers = $rentOffers->isEmpty() ? $saleOffers : $rentOffers->merge($saleOffers);
+        $sortedOffers = $combinedOffers->sortByDesc('offer_date')->values()->all();
+        
         $cleanedOffers = [];
         
-        foreach ($combinedOffers as $offer) {
+        foreach ($sortedOffers as $offer) {
             $propertyImages = $offer['property_images'];
             $firstImageUrl = isset($propertyImages[0]) ? $propertyImages[0]['url'] : null;
         

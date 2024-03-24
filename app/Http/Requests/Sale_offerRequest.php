@@ -18,7 +18,7 @@ class Sale_offerRequest extends FormRequest
     {
         return [
             'buyer_id' => 'required|numeric',
-            'property_sale_id' => 'required|numeric|unique:sales_offers',
+            'property_sale_id' => 'required|numeric',
             'offered_price' => 'required|numeric',
             'message' => 'string',
         ];

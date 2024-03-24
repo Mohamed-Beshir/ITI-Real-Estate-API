@@ -25,21 +25,14 @@ class Sale_offerController extends Controller
      */
     public function index()
     {
-        $salesOffers = DB::table('sales_offers')
-                    ->select(
-                        'sales_offers.offered_price',
-                        'sales_offers.message',
-                        'users.email as buyer_email',
-                        'properties.title',
-                        'sales_offers.status',
-                        'users.name as buyer_name',
-                        'sales_offers.id'
-                    )
-                    ->join('users', 'sales_offers.buyer_id', '=', 'users.id')
-                    ->join('properties', 'sales_offers.property_sale_id', '=', 'properties.id')
-                    ->get();
+        $saleOffers = Sale_offer::all();
+    
+    
+        $responseData = [
+            'data' => $saleOffers->toArray()
+        ];
 
-    return response()->json(['salesOffers' => $salesOffers]);
+        return response()->json($responseData);
     }
 
     /**
