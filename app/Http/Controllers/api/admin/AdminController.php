@@ -82,9 +82,13 @@ class AdminController extends Controller
     }
 
     public function rentOffers(){
-        $rentOffers = Rent_offer::with('buyer', 'propertyRent.property', 'propertyRent.lister')
+        $rentOffers = Rent_offer::with('buyer', 'propertyRent.property.images', 'propertyRent.lister')
             ->get()
             ->map(function ($rentOffer) {
+
+                $property = $rentOffer->propertyRent->property;
+                $images = $property->images->pluck('url')->toArray();
+
                 // Format the response data
                 return [
                     'buyer_name' => $rentOffer->buyer->name,
@@ -97,6 +101,7 @@ class AdminController extends Controller
                     'price' => $rentOffer->propertyRent->updated_price ?? $rentOffer->propertyRent->price,
                     'list_creation_date' => $rentOffer->propertyRent->created_at->format('Y-m-d H:i A'),
                     'property' => [
+                        'id' => $rentOffer->propertyRent->property->id,
                         'title' => $rentOffer->propertyRent->property->title,
                         'city' => $rentOffer->propertyRent->property->city,
                         'district' => $rentOffer->propertyRent->property->district,
@@ -104,6 +109,7 @@ class AdminController extends Controller
                         'type' => $rentOffer->propertyRent->property->type,
                         'description' => $rentOffer->propertyRent->property->description,
                         'area' => $rentOffer->propertyRent->property->area,  
+                        'images' => $images,
                     ],
                 ];
             });
@@ -115,6 +121,10 @@ class AdminController extends Controller
         $saleOffers = Sale_offer::with('buyer', 'propertySale.property', 'propertySale.lister')
             ->get()
             ->map(function ($saleOffer) {
+
+                $property = $saleOffer->propertySale->property;
+                $images = $property->images->pluck('url')->toArray();
+
                 // Format the response data
                 return [
                     'buyer_name' => $saleOffer->buyer->name,
@@ -126,6 +136,7 @@ class AdminController extends Controller
                     'price' => $saleOffer->propertySale->updated_price ?? $rentOffer->propertyRent->price,
                     'list_creation_date' => $saleOffer->propertySale->created_at->format('Y-m-d H:i A'),
                     'property' => [
+                        'id' => $saleOffer->propertySale->property->id,
                         'title' => $saleOffer->propertySale->property->title,
                         'city' => $saleOffer->propertySale->property->city,
                         'district' => $saleOffer->propertySale->property->district,
@@ -133,6 +144,7 @@ class AdminController extends Controller
                         'type' => $saleOffer->propertySale->property->type,
                         'description' => $saleOffer->propertySale->property->description,
                         'area' => $saleOffer->propertySale->property->area,  
+                        'images' => $images,
                     ],
                 ];
             });
