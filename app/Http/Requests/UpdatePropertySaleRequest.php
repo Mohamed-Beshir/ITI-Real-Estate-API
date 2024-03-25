@@ -22,7 +22,7 @@ class UpdatePropertySaleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'price' => 'sometimes|required|numeric',
+            'price' => 'sometimes|numeric',
         ];
     }
 }

@@ -31,9 +31,9 @@ class PropertySaleController extends Controller
     public function update(UpdatePropertySaleRequest $request, PropertySale $propertySale)
     {
 
-        if (auth()->user()->id !== $propertySale->lister_id) {
-            return response()->json(['message' => 'Unauthorized. You do not have permission to perform this action.'], 403);
-        }
+        // if (auth()->user()->id !== $propertySale->lister_id) {
+        //     return response()->json(['message' => 'Unauthorized. You do not have permission to perform this action.'], 403);
+        // }
 
         $data = $request->validated();
 
