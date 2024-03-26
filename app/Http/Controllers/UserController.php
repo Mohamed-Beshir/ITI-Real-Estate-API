@@ -9,6 +9,8 @@ use App\Http\Requests\CreateUserRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 
+use Illuminate\Support\Facades\Hash;
+
 
 
 class UserController extends Controller
@@ -25,46 +27,42 @@ class UserController extends Controller
     }
 
 
-    // public function store(Request $request)
-    // {
-    //     // User::create($request->all());
-    //     $Validator  = Validator::make($request->all(), [
 
-    //         "name" => "required|min:3|:Users",
-    //         "email" => "required|email",
-    //         "password" => "required|min:8",
-    //          "role"=>"required",
-    //         "confirmpassword" => "required|min:8"
-    //     ]);
-    //     if ($Validator->fails()) {
-    //         return response($Validator->errors()->all());
-    //     }
-    //     $user = User::create($request->all());
-
-    //     return response($user, 201);
-    // }
-
-    public function update(Request $request, user $user )
+    public function update(Request $request, User $user)
     {
-        $Validator = Validator::make($request->all(), [
+        $userData = $request->only(['name', 'email']);
 
-            "name" => "required|min:3|:Users",
-            // "email" => [Rule::unique('users')->ignore($user->id)],
-            "email" => "required|email",
+        // Check if password is provided and validate it
+        if ($request->has('password')) {
+            $passwordValidator = Validator::make($request->all(), [
+                'password' => 'required|min:8',
+            ]);
 
-             "password" => "required|min:8",
+            if ($passwordValidator->fails()) {
+                return response($passwordValidator->errors()->all(), 422);
+            }
 
-
-        ]);
-        if ($Validator->fails()) {
-            return response($Validator->errors()->all());
+            $userData['password'] = Hash::make($request->input('password')); // Use Hash::make() function
         }
 
-         $user->update($request->all());
+        // Validate name and email fields if they are provided
+        $validator = Validator::make($userData, [
+            'name' => 'sometimes|required|min:3', // Use 'sometimes' to allow optional field
+            'email' => 'sometimes|required|email', // Use 'sometimes' to allow optional field
+        ]);
 
-        return response($user, 201);
+        if ($validator->fails()) {
+            return response($validator->errors()->all(), 422);
+        }
 
+        // Update only the allowed fields
+        $user->update($userData);
+
+        return response($user->fresh(), 200);
     }
+
+    
+
 
 
 

@@ -25,7 +25,7 @@ class ImageController extends Controller
     {
         $property_id = $request->input('property_id');
         $request->validate([
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Assuming maximum file size is 2MB (2048 KB)
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp', // Assuming maximum file size is 2MB (2048 KB)
         ]);
 
         $uploadedImages = [];

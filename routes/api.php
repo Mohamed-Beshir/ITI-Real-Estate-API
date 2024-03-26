@@ -27,6 +27,8 @@ use App\Http\Controllers\api\Sale_paymentController;
 
 use App\Http\Controllers\api\SimilarPropertiesController;
 
+use App\Http\Controllers\api\PriceDropPropertiesController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -82,6 +84,7 @@ Route::group(['middleware' => 'admin.auth'], function () {
     Route::delete('admin/users/{id}', [AdminController::class, 'deleteUser']);
 
 });
+
 Route::apiResource('images', ImageController::class);
 
 // Route::apiResource('/rent_offers', Rent_offerController::class);

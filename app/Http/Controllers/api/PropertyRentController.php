@@ -30,9 +30,7 @@ class PropertyRentController extends Controller
 
     public function update(UpdatePropertyRentRequest $request, PropertyRent $propertyRent)
     {
-        if (auth()->user()->id !== $propertyRent->lister_id) {
-            return response()->json(['message' => 'Unauthorized. You do not have permission to perform this action.'], 403);
-        }
+        
 
         $data = $request->validated();
 

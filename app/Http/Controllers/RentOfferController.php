@@ -18,7 +18,7 @@ class RentOfferController extends Controller
         $offer->save();
         $buyer_name = $offer->buyer->name;
         $buyer_email = $offer->buyer->email;
-        $propertyTitle = $offer->propertySale->property->title;
+        $propertyTitle = $offer->propertyRent->property->title;
         $mailData = [
             'title' => 'Mail from BAZAR',
             'body_1' => 'Your offer for ',
@@ -44,7 +44,7 @@ class RentOfferController extends Controller
         $offer->save();
         $buyer_name = $offer->buyer->name;
         $buyer_email = $offer->buyer->email;
-        $propertyTitle = $offer->propertySale->property->title;
+        $propertyTitle = $offer->propertyRent->property->title;
         $mailData = [
             'title' => 'Mail from BAZAR',
             'body_1' => 'Your offer for ',

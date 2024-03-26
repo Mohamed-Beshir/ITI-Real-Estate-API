@@ -40,12 +40,22 @@ class PropertyController extends Controller
 
             // Check if there's a rental record
             if ($propertyRent) {
-                $property->price = $propertyRent->price;
+                if (!is_null($propertyRent->updated_price)) {
+                    $property->old_price = $propertyRent->price; // Original price
+                    $property->price = $propertyRent->updated_price; // Updated price
+                } else {
+                    $property->price = $propertyRent->price; // Regular price
+                }
                 $property->lister_id = $propertyRent->lister_id;
             }
             // Check if there's a sales record
             elseif ($propertySale) {
-                $property->price = $propertySale->price;
+                if (!is_null($propertySale->updated_price)) {
+                    $property->old_price = $propertySale->price; // Original price
+                    $property->price = $propertySale->updated_price; // Updated price
+                } else {
+                    $property->price = $propertySale->price; // Regular price
+                }
                 $property->lister_id = $propertySale->lister_id;
             }  
         }
@@ -80,11 +90,21 @@ class PropertyController extends Controller
             }
             // Check if there's a rental record
             if ($propertyRent) {
-                $property->price = $propertyRent->price;
+                if (!is_null($propertyRent->updated_price)) {
+                    $property->old_price = $propertyRent->price; // Original price
+                    $property->price = $propertyRent->updated_price; // Updated price
+                } else {
+                    $property->price = $propertyRent->price; // Regular price
+                }
             }
             // Check if there's a sales record
             elseif ($propertySale) {
-                $property->price = $propertySale->price;
+                if (!is_null($propertySale->updated_price)) {
+                    $property->old_price = $propertySale->price; // Original price
+                    $property->price = $propertySale->updated_price; // Updated price
+                } else {
+                    $property->price = $propertySale->price; // Regular price
+                }
             }  
         }
 
@@ -120,12 +140,23 @@ class PropertyController extends Controller
         $propertySale = PropertySale::where('property_id', $property->id)->first();
         // Check if there's a rental record
         if ($propertyRent) {
-            $property->price = $propertyRent->price;
+            if (!is_null($propertyRent->updated_price)) {
+                $property->old_price = $propertyRent->price; // Original price
+                $property->price = $propertyRent->updated_price; // Updated price
+            } else {
+                $property->price = $propertyRent->price; // Regular price
+            }
             $property->property_rent_id = $propertyRent->id;
+            $property->rental_period = $propertyRent->period;
         }
         // Check if there's a sales record
         elseif ($propertySale) {
-            $property->price = $propertySale->price;
+            if (!is_null($propertySale->updated_price)) {
+                $property->old_price = $propertySale->price; // Original price
+                $property->price = $propertySale->updated_price; // Updated price
+            } else {
+                $property->price = $propertySale->price; // Regular price
+            }
             $property->property_sale_id = $propertySale->id;
         } 
 
@@ -224,81 +255,88 @@ class PropertyController extends Controller
     // }
 
     public function search(Request $request)
-{
-    $city = $request->input('city');
-    $district = $request->input('district');
-    $propertyType = $request->input('propertyType');
-    $status = $request->input('status');
-    $area = $request->input('area');
-    $beds = $request->input('beds');
-    $baths = $request->input('baths');
-    $price = $request->input('price');
+    {
+        $city = $request->input('city');
+        $district = $request->input('district');
+        $propertyType = $request->input('propertyType');
+        $status = $request->input('status');
+        $area = $request->input('area');
+        $beds = $request->input('beds');
+        $baths = $request->input('baths');
+        $price = $request->input('price');
+        $period = $request->input('period');
 
-    $query = Property::query();
+        $query = Property::query();
 
-    // Apply price condition
-    if ($price) {
-        $query->where(function ($subQuery) use ($price) {
-            $subQuery->whereHas('sales', function ($salesQuery) use ($price) {
-                $salesQuery->where('price', '>=', $price);
-            })->orWhereHas('rents', function ($rentsQuery) use ($price) {
-                $rentsQuery->where('price', '>=', $price);
+        // Apply price condition
+        if ($price) {
+            $query->where(function ($subQuery) use ($price) {
+                $subQuery->whereHas('sales', function ($salesQuery) use ($price) {
+                    $salesQuery->where('price', '>=', $price);
+                })->orWhereHas('rents', function ($rentsQuery) use ($price) {
+                    $rentsQuery->where('price', '>=', $price);
+                });
             });
-        });
-    }
-
-    // Apply other filters
-    if ($city) {
-        $query->where('city', 'like', "%$city%");
-    }
-
-    if ($district) {
-        $query->where('district', 'like', "%$district%");
-    }
-
-    if ($propertyType) {
-        $query->where('type', 'like', "%$propertyType%");
-    }
-
-    if ($status) {
-        $query->where('status', $status);
-    }
-
-    if ($area) {
-        $query->where('area', '>', $area);
-    }        
-
-    if ($beds) {
-        $query->where('beds', $beds);
-    }
-
-    if ($baths) {
-        $query->where('baths', $baths);
-    }
-
-    // Get the properties matching the criteria
-    $properties = $query->get();
-    // Fetch price information for each property
-    foreach ($properties as $property) {
-        $propertyRent = PropertyRent::where('property_id', $property->id)->first();
-        $propertySale = PropertySale::where('property_id', $property->id)->first();
-        $image = Image::where('property_id', $property->id)->first();
-        if($image){
-            $property->image = $image->url;
         }
 
-        // Check if there's a rental record
-        if ($propertyRent) {
-            $property->price = $propertyRent->price;
+        if ($period) {
+            $query->whereHas('rents', function ($rentsQuery) use ($period) {
+                $rentsQuery->where('period', $period);
+            });
         }
-        // Check if there's a sales record
-        elseif ($propertySale) {
-            $property->price = $propertySale->price;
-        }  
-    }
 
-    return response()->json($properties);
-}
+        // Apply other filters
+        if ($city) {
+            $query->where('city', 'like', "%$city%");
+        }
+
+        if ($district) {
+            $query->where('district', 'like', "%$district%");
+        }
+
+        if ($propertyType) {
+            $query->where('type', 'like', "%$propertyType%");
+        }
+
+        if ($status) {
+            $query->where('status', $status);
+        }
+
+        if ($area) {
+            $query->where('area', '>', $area);
+        }        
+
+        if ($beds) {
+            $query->where('beds', $beds);
+        }
+
+        if ($baths) {
+            $query->where('baths', $baths);
+        }
+
+        // Get the properties matching the criteria
+        $properties = $query->get();
+        // Fetch price information for each property
+        foreach ($properties as $property) {
+            $propertyRent = PropertyRent::where('property_id', $property->id)->first();
+            $propertySale = PropertySale::where('property_id', $property->id)->first();
+            $image = Image::where('property_id', $property->id)->first();
+            if($image){
+                $property->image = $image->url;
+            }
+
+            // Check if there's a rental record
+            if ($propertyRent) {
+                $property->price = $propertyRent->price;
+            }
+            // Check if there's a sales record
+            elseif ($propertySale) {
+                $property->price = $propertySale->price;
+            }  
+        }
+
+        return response()->json($properties);
+    }
 
 public function properties_agent(Request $request){
     $agent_id = $request->input('agent_id');
@@ -327,11 +365,21 @@ public function properties_agent(Request $request){
         }
         // Check if there's a rental record
         if ($propertyRent) {
-            $property->price = $propertyRent->price;
+            if (!is_null($propertyRent->updated_price)) {
+                $property->old_price = $propertyRent->price; // Original price
+                $property->price = $propertyRent->updated_price; // Updated price
+            } else {
+                $property->price = $propertyRent->price; // Regular price
+            }
         }
         // Check if there's a sales record
         elseif ($propertySale) {
-            $property->price = $propertySale->price;
+            if (!is_null($propertySale->updated_price)) {
+                $property->old_price = $propertySale->price; // Original price
+                $property->price = $propertySale->updated_price; // Updated price
+            } else {
+                $property->price = $propertySale->price; // Regular price
+            }
         }  
     }
     return $properties;
